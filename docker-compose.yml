@@ -1,0 +1,31 @@
+services:
+  db:
+    environment:
+    env_file: .env
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data:Z
+
+  web:
+    build:
+      context: .
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    # command: /wait-for-it.sh db:5432
+    depends_on:
+      - db
+    env_file: .env
+    image: chr/django-test
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/usr/src/app:Z
+
+version: "3.9"
+
+volumes:
+  postgres_data:
+
