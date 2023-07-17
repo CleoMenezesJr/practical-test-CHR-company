@@ -8,6 +8,13 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data:Z
 
+  selenium:
+    image: selenium/standalone-firefox:4.10.0-20230607
+    ports:
+      - 4444:4444
+    restart: always
+    shm_size: 2gb
+
   web:
     build:
       context: .
@@ -17,6 +24,7 @@ services:
              gunicorn config.wsgi:application --bind 0.0.0.0:8000"
     # command: /wait-for-it.sh db:5432
     depends_on:
+      - selenium
       - db
     env_file: .env
     image: chr/django-test
