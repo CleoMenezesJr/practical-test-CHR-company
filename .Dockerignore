@@ -1,4 +1,3 @@
 .Dockerignore
 .env.sample
 Dockerfile
-notes.txt
